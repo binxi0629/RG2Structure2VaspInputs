@@ -1,1 +1,3 @@
 ## Automatically generate vasp inputs files based on RG2 structure
+
+### NOT FINISHED, TBC...
