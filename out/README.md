@@ -1,0 +1,1 @@
+## RG2 structure should be placed here
