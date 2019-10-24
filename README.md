@@ -27,6 +27,8 @@ The calculation contains structure relaxation, and band structure calculation al
 ├── elements_map.json    # contain elements map for POTCAR gerneration use
 └── rg2_data_info_dict.json    # record the structure info here, will be automatically generated
 ```
+
 ####TODOS:
+
 More to come...
 ### NOT FINISHED, TBC...
