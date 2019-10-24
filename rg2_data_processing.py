@@ -5,7 +5,7 @@ import structure_from_rg2
 
 
 def create_cubic_dir():
-    # NB: noly run once at the very beigining
+    # NB: only run once at the very beginning
     root_name = 'rg2_cubic'
     os.mkdir(root_name)
 
@@ -25,7 +25,7 @@ def split_data_info(file_name):
 
 
 def data_processing(root_dir='out'):
-    # NB: noly run once at the very beigining
+    # NB: only run once at the very begining
 
     _root_path = 'rg2_cubic'
     data_dict = {}
@@ -86,7 +86,8 @@ def gen_vaspinputs(root_dir='rg2_cubic'):
         rg2_data.write_incar(relax=True)
         rg2_data.write_kpoints(number_of_kps=9)
         rg2_data.write_potcar()
-
+        
+        # TBC, total number should not be hardcoded
         print(f"\rAutogenerate Vasp Inputs, finished:    {count}|521", end='')
         count += 1
 
