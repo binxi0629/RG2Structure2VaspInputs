@@ -20,12 +20,12 @@ import re, json
 #     new_structure.to(fmt='POSCAR', filename=POSCAR_output)
 
 
-def get_rg2_structure(poscar_input='POSCAR'):
+def get_rg2_structure(poscar_input='POSCAR') -> Structure:
 
     return Structure.from_file(poscar_input)
 
 
-def get_rg2_elements(poscar_input='POSCAR'):
+def get_rg2_elements(poscar_input='POSCAR') -> list:
 
     # NB: all the elements should be required in elements_map.json
     _map_name = 'elements_map.json'
