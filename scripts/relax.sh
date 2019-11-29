@@ -27,12 +27,12 @@ do
 	if [ $num_lines -eq 1 ]
 	then
         echo $(num_lines)
-        echo 'Relaxed!'
+        # echo 'Relaxed!'
         RELAX_NORMALLY=TRUE
         break
     else
-        echo 'NOT Relaxed!'
-        #cp CONTCAR POSCAR
+        # echo 'NOT Relaxed!'
+        cp CONTCAR POSCAR
         echo $(num_relax_times)
         num_relax_times=$((num_relax_times+1))
     fi
