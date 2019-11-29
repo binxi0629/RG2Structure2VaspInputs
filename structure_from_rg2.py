@@ -3,7 +3,8 @@ from pymatgen.symmetry.bandstructure import HighSymmKpath
 from pymatgen.io.vasp.inputs import Incar, Poscar, Potcar, Kpoints, VaspInput
 
 import tools
-import os
+import os,json
+from shutil import copyfile
 
 
 class RG2Structure:
@@ -23,6 +24,7 @@ class RG2Structure:
         self._json_file_name = f'rg2_raw_data_{self.rg2_id}.json'
 
         self._save_to_path = os.path.join('rg2_cubic', f'sg_{self.sg_number}', f'rg2_{self.rg2_id}')
+        self.dict = {}
 
     def record_rg2_structure_info(self):
         pass
@@ -52,10 +54,11 @@ class RG2Structure:
         incar_file_name = os.path.join(self._save_to_path, 'INCAR')
 
         _default_incar_config = {
-            'ALGO': 'Fast',
+            'ALGO': 'ALL',
             'ICHARG': '2',
             'PREC': 'Normal',
             'EDIFF': '1E-5',
+            'EDIFFG': '-0.1',
             'ENCUT': '520',
             'ISMEAR': '0',
             'IBRION': '-1',
@@ -69,7 +72,7 @@ class RG2Structure:
             relax_incar_config = {
                 'IBRION': '2',
                 'NSW': '100',
-                'ISIF': '6',  # only cell will move, the atoms won't move
+                'ISIF': '3',  # only cell will move, the atoms won't move
             }
             _default_incar_config.update(relax_incar_config)
 
@@ -112,3 +115,29 @@ class RG2Structure:
         kpts = Kpoints.automatic_linemode(divisions=divisions, ibz=kpath)
         kpts.write_file(hs_kpoints_file_name)
 
+    def create_bs_working_dir(self):
+        bs_working_dir = os.path.join(self._save_to_path, 'bandStructure')
+        os.mkdir(bs_working_dir)
+
+    def copy_scripts_to_working_dir(self, scripts_dir):
+
+        _r_scripts = ['relax.sh', 'check_state.py']
+        _bs_scripts = ['bs.sh', 'gen_incar_and_hs_kpoints.py', 'vasprun2json.py']
+
+        working_dir = self._save_to_path
+        for r_scripts in _r_scripts:
+            copyfile(os.path.join(scripts_dir, r_scripts), os.path.join(working_dir, r_scripts))
+
+        bs_working_dir = os.path.join(self._save_to_path, 'bandStructure')
+
+        for bs_scripts in _bs_scripts:
+            copyfile(os.path.join(scripts_dir, bs_scripts), os.path.join(bs_working_dir, bs_scripts))
+
+    def generate_json_file(self):
+        working_dir = os.path.join(self._save_to_path, 'bandStructure')
+        _json_file_name = f'rg2_raw_data_{str(self.rg2_id)}.json'
+
+        self.dict['rg2_id'] = self.rg2_id
+
+        with open(os.path.join(working_dir, _json_file_name), 'w') as f:
+            json.dump(self.dict, f, indent=2)
