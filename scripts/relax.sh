@@ -43,8 +43,8 @@ then
     cd ./bandStructure/
     python gen_incar_and_hs_kpoints.py
     qsub -N bs bs.sh
-    echo 'Q' > tmp # Status: Queuing for band structure calculation
-    python check_state.py
+    echo 'Q' > ../tmp # Status: Queuing for band structure calculation
+    python ../check_state.py
 else
     #record error message and return to the root script
     echo 'ERROR' > tmp # Status: Error
