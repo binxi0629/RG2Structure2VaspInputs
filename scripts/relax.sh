@@ -42,9 +42,10 @@ then
     cp POSCAR run.sh POTCAR bandStructure/
     cd ./bandStructure/
     python gen_incar_and_hs_kpoints.py
-    qsub -N bs bs.sh
-    echo 'Q' > tmp # Status: Queuing for band structure calculation
-    python check_state.py
+    # qsub -N bs bs.sh # this command doesn't work due to it's not on the mu node
+    mpirun -hostfile $PBS_NODEFILE vasp-544-n > LOG
+    echo 'Q' > ../tmp # Status: Queuing for band structure calculation
+    python ../check_state.py
 else
     #record error message and return to the root script
     echo 'ERROR' > tmp # Status: Error
