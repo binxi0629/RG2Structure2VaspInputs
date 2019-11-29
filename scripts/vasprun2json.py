@@ -3,7 +3,7 @@ import numpy, json, re, os
 import subprocess
 from typing import List, Dict, Union
 
-_ROOT_PATH = ''  # <<<<<<
+_ROOT_PATH = '~/Work_Use'  # <<<<<< Modify each time one changes the environment
 _rg2_data_info_dict_name = 'rg2_data_info_dict.json'
 _file_name_format = 'rg2_raw_data_'  # rg2_raw_data_<rg2-id>.json
 
