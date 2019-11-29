@@ -8,6 +8,9 @@
 #PBS -q	normal
 #PBS -m e
 
+ulimit -s unlimited
+csh
+cd $PBS_O_WORKDIR
 
 RELAX_NORMALLY=FALSE
 num_relax_times=1
@@ -17,11 +20,7 @@ python check_state.py
 # Judge if relaxed
 while [[ $num_relax_times -le 6 ]]
 do
-	ulimit -s unlimited
-	csh
-	cd $PBS_O_WORKDIR
 	mpirun -hostfile $PBS_NODEFILE vasp-544-n > LOG
-
 	num_lines=$( grep F OSZICAR | wc -l )
 	
 	if [ $num_lines -eq 1 ]
