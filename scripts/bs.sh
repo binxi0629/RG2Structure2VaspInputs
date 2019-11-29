@@ -8,11 +8,13 @@
 #PBS -q	normal
 #PBS -m e
 
-echo 'BS' > ../tmp  # Status: Runing Band Structure calculation
-
 ulimit -s unlimited
 csh
 cd $PBS_O_WORKDIR
+
+echo 'BS' > ../tmp  # Status: Runing Band Structure calculation
+
+
 mpirun -hostfile $PBS_NODEFILE vasp-544-n > LOG
 
 python vasprun2json.py
