@@ -42,7 +42,7 @@ def get_kpoints_labels(kpoints_path: str) -> List[Dict[str, Union[int, str]]]:
 
 def get_file_name():
 
-    return str(subprocess.check_output('ls | grep .vasp', shell=True))
+    return str(subprocess.check_output('ls ../ | grep .vasp', shell=True))
 
 
 def get_rg2_id():
