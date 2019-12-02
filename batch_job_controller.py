@@ -1,11 +1,11 @@
 import json, os
 
 _root_path = '/home/bxi/RG2_gen'
-last_stop = 0
+# last_stop = 0
 _default_data_info_file = 'rg2_data_info_dict.json'
 
 
-def submit_batch_jobs_by_num(number_jobs=20):
+def submit_batch_jobs_by_num(number_jobs=20, last_stop=0):
     with open(_default_data_info_file, 'r') as f:
         rg2_info = json.load(f)
         data_map = rg2_info['map']
@@ -18,7 +18,7 @@ def submit_batch_jobs_by_num(number_jobs=20):
 
     while count < number_jobs:
 
-        job = data_map[i]
+        job = data_map[i-1]
         job_name = job[0]
         job_rg2_id = job[1]
 
@@ -28,7 +28,9 @@ def submit_batch_jobs_by_num(number_jobs=20):
             # print(shell_script_path)
             # os.system(f'cd {shell_script_path}')
 
-            os.system(f'qsub -N {job_rg2_id} {os.path.join(shell_script_path, shell_script)}')
+            os.system(f'cd {shell_script_path} && qsub -N {job_rg2_id} {shell_script} && cd -')
+            # os.system(f'qsub -N {job_rg2_id} {shell_script}')
+            # os.system('cd -')
             count += 1
             job_list.append(job_rg2_id)
 
@@ -39,7 +41,7 @@ def submit_batch_jobs_by_num(number_jobs=20):
 
 
 def main():
-    submit_batch_jobs_by_num(number_jobs=10)
+    submit_batch_jobs_by_num(number_jobs=10, last_stop=10)
 
 
 if __name__ == '__main__':

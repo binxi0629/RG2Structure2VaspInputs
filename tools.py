@@ -1,7 +1,7 @@
 from pymatgen.core import Structure
 from pymatgen.symmetry.bandstructure import HighSymmKpath
 
-import re, json
+import re, json, os
 
 
 # Write POSCAR_test to std POSCAR_test
@@ -25,7 +25,7 @@ def get_rg2_structure(poscar_input='POSCAR') -> Structure:
     return Structure.from_file(poscar_input)
 
 
-def get_rg2_elements(poscar_input='POSCAR') -> list:
+def get_rg2_elements(poscar_input='POSCAR'):
 
     # NB: all the elements should be required in elements_map.json
     _map_name = 'elements_map.json'
@@ -55,3 +55,32 @@ def get_rg2_number_of_atoms():
 
 # write_POSCAR_with_standard_primitive('./POSCAR_test', './si_std_2')
 
+
+def count(root_dir='out'):
+    data_list = []
+    sg_list = []
+
+    for i in range(36):
+        data_list.append(0)
+        sg_list.append(195+i)
+
+    for root, dirs, files in os.walk(root_dir):
+        num_files = len(files)
+        for file in range(num_files):
+            sg_number = int(re.split('-', files[file])[0])
+            if sg_number in range(195, 231):
+                index = get_index(sg_number)
+                data_list[index] += 1
+
+    import matplotlib.pyplot as plt
+
+    plt.bar(sg_list, data_list)
+    plt.show()
+
+
+def get_index(sg_num: int):
+    return sg_num - 195
+
+
+if __name__ == '__main__':
+    count()
