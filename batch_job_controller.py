@@ -1,6 +1,6 @@
 import json, os
 
-_root_path = '/home/bxi/RG2_gen'
+_root_path = '~/RG2_gen'
 # last_stop = 0
 _default_data_info_file = 'rg2_data_info_dict.json'
 
