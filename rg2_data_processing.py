@@ -1,4 +1,4 @@
-import os, re, json
+import os, re, json, random
 from shutil import copyfile
 
 import structure_from_rg2
@@ -25,7 +25,7 @@ def split_data_info(file_name):
 
 
 def data_processing(root_dir='out'):
-    # NB: noly run once at the very beigining
+    # NB: noly run once at the very beginning
 
     # >>>> rg2_data_info_dict.json
     # 'W': Waiting for running
@@ -38,6 +38,13 @@ def data_processing(root_dir='out'):
     # initialize
     data_dict = {}
     data_info = {}
+    target_sg_dict = {
+        195: 0, 196: 0, 199: 0, 200: 0, 201: 0, 202: 0, 203: 0, 204: 0,
+        206: 0, 207: 0, 208: 0, 209: 0, 210: 0, 212: 0, 213: 0, 214: 0,
+        215: 0, 218: 0, 219: 0, 220: 0, 222: 0, 224: 0, 226: 0, 228: 0,
+        229: 0, 230: 0
+    }
+    num_uppper_bound = 100
     data_info['structure_info'] = {}
     name_id_map = []
 
@@ -48,6 +55,13 @@ def data_processing(root_dir='out'):
 
     for root, dirs, files in os.walk(root_dir):
         num_files = len(files)
+
+        # shuffle the directory
+        print(f'before: {files}')
+
+        random.shuffle(files)
+
+        print(f'After: {files}')
         for file in range(num_files):
 
             sg, num_atoms, elements = split_data_info(files[file])
@@ -55,36 +69,39 @@ def data_processing(root_dir='out'):
             invalid_count += 1 if num_atoms > 130 else 0
             sg_number = int(sg)
 
-            if sg_number in range(195, 231):
+            # if sg_number in range(195, 231):
+            if sg_number in target_sg_dict.keys():
 
-                tmp_array = []
+                if target_sg_dict[sg_number] < num_uppper_bound:
+                    target_sg_dict[sg_number] += 1
+                    tmp_array = []
 
-                sg_dir = f'sg_{sg_number}'
-                sub_path_name = f'rg2_{rg2_id}'
-                os.mkdir(os.path.join(_root_path, sg_dir, sub_path_name))
+                    sg_dir = f'sg_{sg_number}'
+                    sub_path_name = f'rg2_{rg2_id}'
+                    os.mkdir(os.path.join(_root_path, sg_dir, sub_path_name))
 
-                target_file_name = f'rg2_raw_data_{rg2_id}.vasp'
-                dest_path = os.path.join(_root_path, sg_dir, sub_path_name, target_file_name)
-                # dest_path = os.path.join(_root_path, sg_dir, sub_path_name)
-                parent_path = os.path.join(_root_path, sg_dir, sub_path_name)
-                copyfile(os.path.join(root_dir, files[file]), dest_path)
+                    target_file_name = f'rg2_raw_data_{rg2_id}.vasp'
+                    dest_path = os.path.join(_root_path, sg_dir, sub_path_name, target_file_name)
+                    # dest_path = os.path.join(_root_path, sg_dir, sub_path_name)
+                    parent_path = os.path.join(_root_path, sg_dir, sub_path_name)
+                    copyfile(os.path.join(root_dir, files[file]), dest_path)
 
-                data_info['structure_info'][files[file]] = {}
-                data_info['structure_info'][files[file]]['path'] = dest_path
-                data_info['structure_info'][files[file]]['parent_path'] = parent_path
-                data_info['structure_info'][files[file]]['rg_id'] = rg2_id
-                data_info['structure_info'][files[file]]['spacegroup_number'] = sg_number
-                data_info['structure_info'][files[file]]['state'] = 'W'  # W: waiting for running
+                    data_info['structure_info'][files[file]] = {}
+                    data_info['structure_info'][files[file]]['path'] = dest_path
+                    data_info['structure_info'][files[file]]['parent_path'] = parent_path
+                    data_info['structure_info'][files[file]]['rg_id'] = rg2_id
+                    data_info['structure_info'][files[file]]['spacegroup_number'] = sg_number
+                    data_info['structure_info'][files[file]]['state'] = 'W'  # W: waiting for running
 
-                data_dict[sg_number] += 1
+                    data_dict[sg_number] += 1
 
-                tmp_array.append(files[file])
-                tmp_array.append(rg2_id)
+                    tmp_array.append(files[file])
+                    tmp_array.append(rg2_id)
 
-                name_id_map.append(tmp_array)
+                    name_id_map.append(tmp_array)
 
-                print(f'\r\tSucessfully copied: {rg2_id}|{num_files}', end='')
-                rg2_id += 1
+                    print(f'\r\tSucessfully copied: {rg2_id}|{num_files}', end='')
+                    rg2_id += 1
 
     data_info['map'] = name_id_map
 
@@ -93,6 +110,7 @@ def data_processing(root_dir='out'):
     print('\nSuccessfully saved rg2_data_info_dict.json!')
     print(data_dict)
     print(invalid_count)
+    print(target_sg_dict)
     pass
 
 
