@@ -49,7 +49,7 @@ then
     mpirun -hostfile $PBS_NODEFILE vasp-544-n > LOG
 
     python vasprun2json.py
-    if [ -f rg2_raw_data_*.json ]
+    if [ -f ../rg2_raw_data_*.json ]
     then
         echo 'F' > ../tmp
     else
