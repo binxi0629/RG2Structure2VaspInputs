@@ -41,7 +41,7 @@ Python version: >= 3.0
 
 [Pymatgen](https://pymatgen.org/#getting-pymatgen) version: v2019.11.11(suggested, very old verison may casue bugs)
 
-[VASP](https://cms.mpi.univie.ac.at/marsweb/) version: vasp-544-n (You can set your own version in /scripts/relax.sh)
+[VASP](https://cms.mpi.univie.ac.at/marsweb/) version: vasp-544-n (You can set your own version in [relax.sh](/scripts/relax.sh))
 
 Portable Batch System (PBS): using PBS for job scheduling 
 
