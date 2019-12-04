@@ -59,7 +59,7 @@ class RG2Structure:
             'PREC': 'Normal',
             'EDIFF': '1E-5',
             'EDIFFG': '-0.1',
-            'ENCUT': '520',
+            'ENCUT': '430',
             'ISMEAR': '0',
             'IBRION': '-1',
             'ISIF': '0',
