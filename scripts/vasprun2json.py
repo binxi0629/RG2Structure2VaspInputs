@@ -74,7 +74,7 @@ def record_energy_and_pressure(default_dir='..'):
         pressure = re.split(' ', re.split(' kB', tmp_p_line)[0])[-1]
 
     # print(pressure, 'kB')
-    return formation_energy, pressure
+    return f'{formation_energy} eV', f'{pressure} kB'
 
 
 def wirte2json():
