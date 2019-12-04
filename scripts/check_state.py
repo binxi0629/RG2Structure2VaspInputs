@@ -2,7 +2,7 @@ import json
 import os
 import re, subprocess
 
-_ROOT_PATH = '~/RG2_gen'  # <<<<<<
+_ROOT_PATH = '/home/bxi/RG2_gen'  # <<<<<<
 _rg2_data_info_dict_name = 'rg2_data_info_dict.json'
 _file_name_format = 'rg2_raw_data_'  # rg2_raw_data_<rg2-id>.json
 
