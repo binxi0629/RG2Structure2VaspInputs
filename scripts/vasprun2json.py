@@ -52,6 +52,31 @@ def get_rg2_id():
     return rg2_id
 
 
+def record_energy_and_pressure(default_dir='..'):
+
+    # print(os.system('pwd'))
+    oszicar_path = os.path.join(default_dir, 'OSZICAR')
+    outcar_path = os.path.join(default_dir, 'OUTCAR')
+
+    try:
+        tmp_f_line = str(subprocess.check_output(f'grep F {oszicar_path}', shell=True))
+    except Exception:
+        formation_energy = None
+    else:
+        formation_energy = re.split(' E0', re.split('F= ', tmp_f_line)[1])[0]
+    # print(formation_energy)
+
+    try:
+        tmp_p_line = str(subprocess.check_output(f'grep pressure {outcar_path}', shell=True))
+    except Exception:
+        pressure = None
+    else:
+        pressure = re.split(' ', re.split(' kB', tmp_p_line)[0])[-1]
+
+    # print(pressure, 'kB')
+    return formation_energy, pressure
+
+
 def wirte2json():
 
     _default_dir = '..'
@@ -69,12 +94,16 @@ def wirte2json():
     # print(kpoints)
     # print(kpoints_labels)
 
+    formation_energy, pressure = record_energy_and_pressure()
+
     data = {}
     data['band'] = {}
     data['rg2_id'] = rg2_id
     data['band']['bands'] = eigenvalues.transpose()
     data['band']['branches'] = kpoints_labels
     data['band']['kpoints'] = kpoints
+    data['formation_energy'] = formation_energy
+    data['pressure'] = pressure
     with open(os.path.join(_default_dir, file_name), 'w') as f:
         json.dump(data, f, indent=2, cls=NumpyEncoder)
 
